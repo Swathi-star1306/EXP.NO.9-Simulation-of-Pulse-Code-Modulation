@@ -29,86 +29,116 @@ To simulate the process of Pulse Code Modulation (PCM) and observe the quantizat
 9. End the program.
 
 # PROGRAM
-```python
-import matplotlib.pyplot as plt
-
+```pythonimport matplotlib.pyplot as plt
 import numpy as np
 
+# Parameters
 sampling_rate = 5000
-
-frequency = 50
-
 duration = 0.1
-
 quantization_levels = 16
 
+# Time base
 t = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
 
-message_signal = np.sin(2 * np.pi * frequency * t)
+# Two message signals
+frequency1 = 50
+frequency2 = 120
+message_signal1 = np.sin(2 * np.pi * frequency1 * t)
+message_signal2 = np.sin(2 * np.pi * frequency2 * t)
 
+# Quantization function
+def quantize(signal, levels):
+    step = (max(signal) - min(signal)) / levels
+    quantized = np.round(signal / step) * step
+    pcm = ((quantized - min(quantized)) / step).astype(int)
+    return quantized, pcm
+
+# Quantize both signals
+quantized_signal1, pcm_signal1 = quantize(message_signal1, quantization_levels)
+quantized_signal2, pcm_signal2 = quantize(message_signal2, quantization_levels)
+
+# Multiplexing the PCM signals by interleaving
+multiplexed_pcm = np.empty((pcm_signal1.size + pcm_signal2.size,), dtype=int)
+multiplexed_pcm[0::2] = pcm_signal1
+multiplexed_pcm[1::2] = pcm_signal2
+
+# Time base for multiplexed signal
+t_mux = np.linspace(0, duration, multiplexed_pcm.size, endpoint=False)
+
+# Clock signal for reference
 clock_signal = np.sign(np.sin(2 * np.pi * 200 * t))
 
-quantization_step = (max(message_signal) - min(message_signal)) / quantization_levels
+# Plotting
+plt.figure(figsize=(14, 12))
 
-quantized_signal = np.round(message_signal / quantization_step) * quantization_step
-
-pcm_signal = (quantized_signal - min(quantized_signal)) / quantization_step
-
-pcm_signal = pcm_signal.astype(int)
-
-plt.figure(figsize=(12, 10))
-
-plt.subplot(4, 1, 1)
-
-plt.plot(t, message_signal, label="Message Signal (Analog)", color='blue')
-
-plt.title("Message Signal (Analog)")
-
+plt.subplot(8, 1, 1)
+plt.plot(t, message_signal1, label="Message Signal 1 (50Hz)", color='blue')
+plt.title("Original Message Signal 1")
 plt.xlabel("Time [s]")
-
 plt.ylabel("Amplitude")
-
 plt.grid(True)
+plt.legend()
 
-plt.subplot(4, 1, 2)
-
-plt.plot(t, clock_signal, label="Clock Signal (Increased Frequency)", color='green')
-
-plt.title("Clock Signal (Increased Frequency)")
-
+plt.subplot(8, 1, 2)
+plt.plot(t, clock_signal, label="Clock Signal", color='green')
+plt.title("Clock Signal")
 plt.xlabel("Time [s]")
-
 plt.ylabel("Amplitude")
-
 plt.grid(True)
+plt.legend()
 
-plt.subplot(4, 1, 3)
-
-plt.step(t, quantized_signal, label="PCM Modulated Signal", color='red')
-
-plt.title("PCM Modulated Signal (Quantized)")
-
+plt.subplot(8, 1, 3)
+plt.step(t, quantized_signal1, label="Quantized Signal 1", color='red')
+plt.title("Quantized Signal 1")
 plt.xlabel("Time [s]")
-
 plt.ylabel("Amplitude")
-
 plt.grid(True)
+plt.legend()
 
-plt.subplot(4, 1, 4)
-
-plt.plot(t, quantized_signal, label="Signal Demodulation", color='purple', linestyle='--')
-
-plt.title("Signal Without Demodulation")
-
+plt.subplot(8, 1, 4)
+plt.plot(t, message_signal2, label="Message Signal 2 (120Hz)", color='orange', alpha=0.7)
+plt.title("Original Message Signal 2")
 plt.xlabel("Time [s]")
-
 plt.ylabel("Amplitude")
-
 plt.grid(True)
+plt.legend()
+
+plt.subplot(8, 1, 5)
+plt.plot(t, clock_signal, label="Clock Signal", color='green')
+plt.title("Clock Signal")
+plt.xlabel("Time [s]")
+plt.ylabel("Amplitude")
+plt.grid(True)
+plt.legend()
+
+plt.subplot(8, 1, 6)
+plt.step(t, quantized_signal2, label="Quantized Signal 2", color='purple', alpha=0.7)
+plt.title("Quantized Signal 2")
+plt.xlabel("Time [s]")
+plt.ylabel("Amplitude")
+plt.grid(True)
+plt.legend()
+
+plt.subplot(8, 1, 7)
+plt.step(t, quantized_signal1, label="Quantized Signal 1", color='red')
+plt.step(t, quantized_signal2, label="Quantized Signal 2", color='purple', alpha=0.7)
+plt.title("Overlay of Quantized Signals")
+plt.xlabel("Time [s]")
+plt.ylabel("Amplitude")
+plt.grid(True)
+plt.legend()
+
+plt.subplot(8, 1, 8)
+plt.step(t_mux, multiplexed_pcm, label="Multiplexed PCM Signal", color='black')
+plt.title("Multiplexed PCM Signal (Interleaved)")
+plt.xlabel("Time [s]")
+plt.ylabel("PCM Value")
+plt.grid(True)
+plt.legend()
 
 plt.tight_layout()
-
 plt.show()
+)
 ```
 
 # OUTPUT
@@ -116,7 +146,8 @@ plt.show()
 
 **PULSE CODE MODULATION**
 
-![image](https://github.com/user-attachments/assets/f4c3c1db-7b07-4e72-ba15-888669e41022)
+![image](https://github.com/user-attachments/assets/f42b952f-cf82-425e-8097-b53a7b4885e5)
+
 
  
 # RESULT / CONCLUSIONS
