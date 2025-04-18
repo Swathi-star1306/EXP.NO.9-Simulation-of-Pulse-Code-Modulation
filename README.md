@@ -2,7 +2,7 @@
 9.Simulation of PCM
 
 # AIM
-To simulate the process of Pulse Code Modulation (PCM) and observe the quantization, encoding, and reconstruction of a sampled analog signal.
+To study and implement 2-channel Time Division Multiplexing (TDM) and Sampling of analog signals, and perform Pulse Code Modulation (PCM) and Demodulation
 
 # SOFTWARE REQUIRED
 1. Python
@@ -10,23 +10,36 @@ To simulate the process of Pulse Code Modulation (PCM) and observe the quantizat
    libraries: numpy, matplotlib
 
 # ALGORITHMS
-1. Start the program.
+1. Start the simulation in Google Colab.
 
-2. Initialize parameters like sampling rate, frequency of analog signal, duration, and number of quantization levels.
+2. Import necessary libraries such as NumPy for numerical operations and Matplotlib for plotting.
 
-3. Generate time vector using the sampling rate and duration.
+3. Generate an analog signal, typically a sine wave using NumPy.
 
-4. Create an analog message signal using a sine wave.
+      Example: 1 kHz sine wave with sampling rate of 8 kHz.
 
-5. Generate a clock signal with a higher frequency to simulate the sampling clock.
+4. Sample the analog signal at a fixed sampling frequency.
 
-6. Quantize the analog message signal using defined quantization levels.
+      Use np.arange() or np.linspace() to define the time vector.
 
-7. Encode the quantized signal into digital form by converting amplitude values to integer levels (PCM).
+5. Quantize the sampled signal:
 
-8. Plot the message signal, clock signal, quantized (PCM) signal, and demodulated signal.
+       Define the number of quantization levels (e.g., 8-bit or 256 levels).
 
-9. End the program.
+       Perform uniform quantization by mapping amplitude values to nearest level.
+
+6. Encode the quantized signal into binary (PCM).
+
+        Convert each quantized value to its binary equivalent.
+
+7. Plot waveforms for:
+
+       Original analog signal
+
+       Sampled signal
+
+       Quantized signal
+
 
 # PROGRAM
 ```pythonimport matplotlib.pyplot as plt
@@ -151,6 +164,7 @@ plt.show()
 
  
 # RESULT / CONCLUSIONS
-The simulation of Pulse Code Modulation (PCM) was successfully performed. The analog signal was sampled, quantized, encoded into binary format, and reconstructed from the encoded data. The reconstructed signal closely followed the original analog input, validating the working of PCM.
+
+The Pulse Code Modulation (PCM) technique was successfully implemented and simulated in Google Colab using Python. A sinusoidal analog signal was sampled, quantized, and encoded into binary form. The simulation demonstrated the process of converting an analog signal into a digital stream using PCM. The reconstructed signal closely resembled the original waveform, validating the accuracy of the simulation. This highlights the efficiency of PCM in representing analog data in digital communication systems.
 
 
